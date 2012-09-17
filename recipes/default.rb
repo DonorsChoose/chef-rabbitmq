@@ -66,6 +66,7 @@ when "redhat", "centos", "scientific", "amazon", "fedora"
     end
 
     rpm_package "#{Chef::Config[:file_cache_path]}/rabbitmq-server-#{node['rabbitmq']['version']}-1.noarch.rpm" do
+      options "--nodeps"
       action :install
     end
   end
@@ -107,6 +108,16 @@ if node['rabbitmq']['cluster'] and node['rabbitmq']['erlang_cookie'] != existing
 
   service "rabbitmq-server" do
     action :start
+  end
+end
+
+# Is this okay?
+if node[:rabbitmq][:federate]
+  bash "enable_federation" do
+    user "root"
+    code <<-EOH
+    rabbitmq-plugins enable rabbitmq_federation
+    EOH
   end
 end
 
