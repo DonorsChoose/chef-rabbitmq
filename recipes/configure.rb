@@ -70,6 +70,7 @@ if node[:rabbitmq][:federate]
     user "root"
     code <<-EOH
     rabbitmq-plugins enable rabbitmq_federation
+    chkconfig rabbitmq-server on
     EOH
   end
 end
