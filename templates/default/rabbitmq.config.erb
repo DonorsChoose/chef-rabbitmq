@@ -38,8 +38,7 @@
                      }]},
     {connections, [
                    <% node[:rabbitmq][:upstream_connections].each_with_index do |connection, index| %>
-                   {"<%= connection[:name] %>", [{host, "<%= connection[:host] %>"},
-                                               {port, 5672}]}<% if index != node[:rabbitmq][:upstream_connections].length - 1 -%>,<% end %>
+                   {"<%= connection[:name] %>", [{host, "<%= connection[:host] %>"}, {port, 5672}]}<% if index != node[:rabbitmq][:upstream_connections].length - 1 -%>,<% end %>
                    <% end %>
                   ]}
    ]
