@@ -33,7 +33,7 @@
                    <% end %>
                   ]}
    ]
-}
+},
 <% end %>
 <% if node['rabbitmq']['ssl'] -%>
     {ssl_listeners, [<%= node['rabbitmq']['ssl_port'] %>]},
