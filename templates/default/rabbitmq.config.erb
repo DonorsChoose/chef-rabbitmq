@@ -10,7 +10,17 @@
 <% if node[:rabbitmq][:disk_free_limit] %>
    {disk_free_limit, <%= node[:rabbitmq][:disk_free_limit] %>},
 <% end %>
-<% if node[:rabbitmq][:federate] && node[:rabbitmq][:upstream_connections] -%>
+<% if node['rabbitmq']['ssl'] -%>
+    {ssl_listeners, [<%= node['rabbitmq']['ssl_port'] %>]},
+    {ssl_options, [{cacertfile,"<%= node['rabbitmq']['ssl_cacert'] %>"},
+                    {certfile,"<%= node['rabbitmq']['ssl_cert'] %>"},
+                    {keyfile,"<%= node['rabbitmq']['ssl_key'] %>"},
+                    {verify,verify_none},
+                    {fail_if_no_peer_cert,false}]},
+<% end %>
+    {default_user, <<"<%= node['rabbitmq']['default_user'] %>">>},
+    {default_pass, <<"<%= node['rabbitmq']['default_pass'] %>">>}
+  ]}<% if node[:rabbitmq][:federate] && node[:rabbitmq][:upstream_connections] -%>,
 {rabbitmq_federation,
    [
     {exchanges, [[{exchange, "main"},
@@ -33,17 +43,6 @@
                    <% end %>
                   ]}
    ]
-},
+}
 <% end %>
-<% if node['rabbitmq']['ssl'] -%>
-    {ssl_listeners, [<%= node['rabbitmq']['ssl_port'] %>]},
-    {ssl_options, [{cacertfile,"<%= node['rabbitmq']['ssl_cacert'] %>"},
-                    {certfile,"<%= node['rabbitmq']['ssl_cert'] %>"},
-                    {keyfile,"<%= node['rabbitmq']['ssl_key'] %>"},
-                    {verify,verify_none},
-                    {fail_if_no_peer_cert,false}]},
-<% end %>
-    {default_user, <<"<%= node['rabbitmq']['default_user'] %>">>},
-    {default_pass, <<"<%= node['rabbitmq']['default_pass'] %>">>}
-  ]}
 ].
