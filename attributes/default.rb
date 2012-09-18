@@ -26,26 +26,9 @@ default['rabbitmq']['cluster'] = false
 default['rabbitmq']['cluster_disk_nodes'] = []
 default['rabbitmq']['erlang_cookie'] = 'AnyAlphaNumericStringWillDo'
 
-default['rabbitmq']['upstream_connections'] = [
-            {
-                :name => "tomcat1",
-                :host => "out1"
-            },
-            {
-                :name => "tomcat2",
-                :host => "out2"
-            },
-            {
-                :name => "tomcat3",
-                :host => "out3"
-            },
-            {
-                :name => "tomcat4",
-                :host => "out4"
-            }
-        ]
+default['rabbitmq']['upstream_connections'] = []
 default['rabbitmq']['disk_free_limit'] = 25000000
-default['rabbitmq']['federate'] = true
+default['rabbitmq']['federate'] = false
 
 #ssl
 default['rabbitmq']['ssl'] = false
