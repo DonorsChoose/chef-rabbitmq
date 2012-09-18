@@ -7,6 +7,9 @@
 <% if node['rabbitmq']['cluster'] && node['rabbitmq']['cluster_disk_nodes'] -%>
     {cluster_nodes, [<%= node['rabbitmq']['cluster_disk_nodes'].map{|n| "\'#{n}\'"}.join(',') %>]},
 <% end %>
+<% if node[:rabbitmq][:disk_free_limit] %>
+   {disk_free_limit, <%= node[:rabbitmq][:disk_free_limit] %>},
+<% end %>
 <% if node[:rabbitmq][:federate] && node[:rabbitmq][:upstream_connections] -%>
 {rabbitmq_federation,
    [
@@ -16,7 +19,7 @@
     {upstream_sets, [{"tomcats", [
                                   <% node[:rabbitmq][:upstream_connections].each_with_index do |connection, index| %>
                                   [
-                                   {connection, "<%= connection.name %>"},
+                                   {connection, "<%= connection[:name] %>"},
                                    {exchange, "upstream"},
                                    {max_hops, 1}
                                   ]<% if index != node[:rabbitmq][:upstream_connections].length - 1 -%>,<% end %>
@@ -25,7 +28,7 @@
                      }]},
     {connections, [
                    <% node[:rabbitmq][:upstream_connections].each_with_index do |connection, index| %>
-                   {"<%= connection.name %>", [{host, "<%= connection.host %>"},
+                   {"<%= connection[:name] %>", [{host, "<%= connection[:host] %>"},
                                                {port, 5672}]}<% if index != node[:rabbitmq][:upstream_connections].length - 1 -%>,<% end %>
                    <% end %>
                   ]}
